@@ -1,8 +1,17 @@
 # IBEX-PyReg
 
-`pyreg.py` registers multiplexed immunofluorescence cycle stacks using DAPI as the reference channel.
+IBEX-PyReg lines up the imaging cycles of a multiplex immunofluorescence (IBEX)
+experiment, so every marker sits on the same cells. It uses the DAPI channel of each cycle as
+the reference. It first corrects the XY shift by phase cross-correlation, then corrects tissue
+warping with deformable registration in ANTs.
 
-The pipeline performs two sequential steps per non-reference cycle:
+![24 DAPI channels overlaid after registration](media/portfolio.png)
+
+*24 DAPI channels from one mouse brain section, overlaid after registration with IBEX-PyReg.*
+
+## How it works
+
+`pyreg.py` runs two steps for each cycle after the first:
 1. Coarse XY translation via phase cross-correlation.
 2. Deformable refinement via ANTsPyx SyN registration.
 
@@ -23,8 +32,8 @@ python pyreg.py <input_dir> [<input_dir> ...]
 Examples:
 
 ```bash
-python pyreg.py "D:\\202504 Ibex\\APP30"
-python pyreg.py "D:\\202504 Ibex\\APP30" "D:\\202504 Ibex\\APP32"
+python pyreg.py sample_A
+python pyreg.py sample_A sample_B
 python pyreg.py data --crop_size 1024 --threads 8
 python pyreg.py data --axes ZCYX --dapi_channel 0
 ```
